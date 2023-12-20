@@ -1,0 +1,136 @@
+* {
+	padding: 0;
+	margin: 0;
+	box-sizing: border-box;
+	font-family: "Montserrat", sans-serif;
+}
+body{
+	
+	display: grid;
+	place-content: center;
+	height: 100vh;
+}
+.container{
+	width: 300px;
+	border: 1px solid rgba(0,0,0,0.2);
+	max-height: 450px;
+	margin: 1rem 2rem;
+	border-radius: 20px;
+	box-shadow: 1px 1px 10px rgba(0,0,0,0.2),
+	-1px -1px 10px rgba(255,255,255,0.3);
+}
+.wrapper{
+	padding: 1rem 2rem;
+}
+.container .list::-webkit-scrollbar{
+	display: none;
+}
+.container .list {
+	overflow-y: scroll;
+	-ms-overflow-style:none;
+	scrollbar-width: none;
+	margin-block: 1rem;
+	max-height: 315px;
+}
+.container > h1 {
+	text-align: center;
+	margin-top:0.5rem;
+	margin-bottom: 1rem;
+}
+.container form {
+	display: flex;
+	align-content: center;
+}
+.container form input {
+	border-radius: 10px;
+	border: none;
+	outline: none;
+	box-shadow: 0 3px 10px rgba(0,0,0,0.2) inset;
+	padding:0.75rem;
+	flex-grow:1;
+}
+.container form button {
+	outline: none ;
+	border: none;
+	background: transparent;
+	font-size: 1.25rem;
+	margin-left:0.5rem;
+}
+.container form button:hover i {
+	transform: scale(1.2);
+}
+
+.item {
+	display: flex;
+	justify-content: space-between;
+	background: #F5F5F5;
+	padding:1rem;
+	align-items: center;
+	margin-bottom: 5px;
+}
+#no-tasks{
+	display: flex;
+	justify-content: center;
+	background: #F5F5F5;
+	padding:1rem;
+	align-items: center;
+	margin-bottom: 5px;
+	text-align: center;
+}
+.check-item{
+	margin-right: 0.5rem;
+}
+
+.switch-buttons{
+	display: flex;
+	margin-inline:0.5rem 1rem;
+	height: fit-content;
+
+}
+.switch-buttons button{
+	outline: none;
+	border: none;
+	background: transparent;
+	color:rgba(0,0,0,0.2);
+}
+.switch-buttons button:hover{
+	transform: scale(1.2);
+	color:rgba(0,0,0,1);
+}
+.to-do-description{
+	text-align: center;
+	margin-right:auto;
+	margin-left: 1rem;
+	cursor: default;
+}
+
+.hidden-buttons{
+	border:none;
+	outline: none;
+	font-size: 1rem;
+	visibility:hidden;
+	color: rgba(0,0,0,0.2);
+}
+.hidden-buttons:hover {
+	color:rgba(0,0,0,1);
+}
+
+.item:hover .hidden-buttons{
+	visibility: visible ;
+}
+
+.fa-trash{
+	margin-left: 1rem;
+}
+
+.fa-pen-to-square{
+	margin-right: 1rem;
+}
+.item input:checked + p {
+	text-decoration: line-through;
+	color:rgba(0,0,0,0.3);
+}
+
+.edit {
+	visibility: hidden;
+}
