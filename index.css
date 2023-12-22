@@ -5,17 +5,16 @@
 	font-family: "Montserrat", sans-serif;
 }
 body{
-	
-	display: grid;
-	place-content: center;
-	height: 100vh;
+	display: flex;
+	justify-content: center;
 }
 .container{
+	margin-top: 2rem;
 	width: 300px;
 	border: 1px solid rgba(0,0,0,0.2);
 	max-height: 450px;
-	margin: 1rem 2rem;
 	border-radius: 20px;
+	padding-top:1rem;
 	box-shadow: 1px 1px 10px rgba(0,0,0,0.2),
 	-1px -1px 10px rgba(255,255,255,0.3);
 }
@@ -36,6 +35,8 @@ body{
 	text-align: center;
 	margin-top:0.5rem;
 	margin-bottom: 1rem;
+	font-family: "Valera Round",sans-serif;
+	filter:drop-shadow(3px 3px 1px violet);
 }
 .container form {
 	display: flex;
@@ -55,15 +56,18 @@ body{
 	background: transparent;
 	font-size: 1.25rem;
 	margin-left:0.5rem;
+	filter:drop-shadow(3px 3px 1px violet);
 }
-.container form button:hover i {
+.container form button:hover {
 	transform: scale(1.2);
+	filter: drop-shadow(1px 1px 1px violet);
 }
 
 .item {
 	display: flex;
 	justify-content: space-between;
-	background: #F5F5F5;
+/*	background: #F5F5F5;*/
+	background: rgba(165, 55, 253,0.2);
 	padding:1rem;
 	align-items: center;
 	margin-bottom: 5px;
@@ -71,7 +75,8 @@ body{
 #no-tasks{
 	display: flex;
 	justify-content: center;
-	background: #F5F5F5;
+/*	background: #F5F5F5;*/
+	background: rgba(165, 55, 253,0.2);
 	padding:1rem;
 	align-items: center;
 	margin-bottom: 5px;
@@ -95,10 +100,11 @@ body{
 }
 .switch-buttons button:hover{
 	transform: scale(1.2);
-	color:rgba(0,0,0,1);
+/*	color:rgba(0,0,0,1);*/
+	color: darkviolet;
 }
 .to-do-description{
-	text-align: center;
+	text-align: start;
 	margin-right:auto;
 	margin-left: 1rem;
 	cursor: default;
@@ -110,9 +116,11 @@ body{
 	font-size: 1rem;
 	visibility:hidden;
 	color: rgba(0,0,0,0.2);
+	background: transparent;
 }
 .hidden-buttons:hover {
-	color:rgba(0,0,0,1);
+/*	color:rgba(0,0,0,1);*/
+	color: darkviolet;
 }
 
 .item:hover .hidden-buttons{
@@ -126,11 +134,17 @@ body{
 .fa-pen-to-square{
 	margin-right: 1rem;
 }
-.item input:checked + p {
+.item input:checked + label {
 	text-decoration: line-through;
 	color:rgba(0,0,0,0.3);
 }
-
+.item input[type=checkbox]{
+	accent-color: violet;
+}
+.checked{
+	text-decoration: line-through;
+	color:rgba(0,0,0,0.3);
+}
 .edit {
 	visibility: hidden;
 }

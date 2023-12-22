@@ -1,157 +1,182 @@
 // Input Task component
 let currentInput = document.getElementById("input");
+currentInput.addEventListener("keypress",(event)=>{
+	if (event.key === "Enter") {
+    // Cancel the default action, if needed
+    event.preventDefault();
+    // Trigger the button element with a click
+    addToList();
+  }
+});
+
 // List div containing "tasks" components
 let listContainer = document.querySelector(".list");
 
+let addTask = document.getElementById("add-task");
+addTask.addEventListener("click", () => addToList());
+
 // Render array from localStorage
-function renderItem(input,index){
+function renderItem(input, index, isChecked) {
+  const itemContainer = document.createElement("div");
+  itemContainer.classList.add("item");
+  itemContainer.setAttribute("id", `${index}`);
 
-	const itemContainer = document.createElement("div");
-	itemContainer.classList.add("item");
-	itemContainer.setAttribute("id",`${index}`);
+  const itemCheckbox = document.createElement("input");
+  itemCheckbox.setAttribute("type", "checkbox");
+  itemCheckbox.setAttribute("id", `item${index}`);
+  itemCheckbox.classList.add("check-item");
+  itemCheckbox.checked = isChecked;
+  itemCheckbox.addEventListener("change", () => {
+    updateCheckboxState(index, itemCheckbox.checked);
+  });
 
-	// const editButton = document.createElement("button");
-	
-	// editButton.classList.add("edit");
+  const itemName = document.createElement("label");
+  itemName.textContent = input;
+  itemName.setAttribute("for", `item${index}`);
+  itemName.classList.add("to-do-description");
 
+  const itemButtonContainer = document.createElement("div");
+  itemButtonContainer.classList.add("switch-buttons");
 
-	// const editIcon = document.createElement("i");
-	// editIcon.classList.add("fa-solid");
-	// editIcon.classList.add("fa-pen-to-square");
+  const itemButtonUp = document.createElement("button");
 
+  const arrowUp = document.createElement("i");
+  arrowUp.classList.add("fa-solid");
+  arrowUp.classList.add("fa-arrow-up-long");
+  itemButtonUp.addEventListener("click", () => moveItemUp(index, index - 1));
 
-	const itemCheckbox = document.createElement("input");
-	itemCheckbox.setAttribute("type","checkbox");
-	itemCheckbox.setAttribute("name","list-done");
-	itemCheckbox.classList.add("check-item");
+  const itemButtonDown = document.createElement("button");
 
-	const itemName = document.createElement("p");
-	itemName.textContent = input;
-	itemName.classList.add("to-do-description");
+  const arrowDown = document.createElement("i");
+  arrowDown.classList.add("fa-solid");
+  arrowDown.classList.add("fa-arrow-down-long");
+  itemButtonDown.addEventListener("click", () => moveItemDown(index, index + 1));
 
-	const itemButtonContainer = document.createElement("div");
-	itemButtonContainer.classList.add("switch-buttons");
+  const deleteButton = document.createElement("button");
+  deleteButton.classList.add("hidden-buttons");
+  deleteButton.addEventListener("click", () => deleteItem(index));
 
-	const itemButtonUp = document.createElement("button");
+  const deleteIcon = document.createElement("i");
+  deleteIcon.classList.add("fa-solid");
+  deleteIcon.classList.add("fa-trash");
 
-	const arrowUp = document.createElement("i");
-	arrowUp.classList.add("fa-solid");
-	arrowUp.classList.add("fa-arrow-up-long");
-	itemButtonUp.setAttribute("onclick",`moveItemUp(${index},${index - 1})`)
+  itemButtonUp.appendChild(arrowUp);
+  itemButtonDown.appendChild(arrowDown);
 
-	const itemButtonDown = document.createElement("button");
+  deleteButton.appendChild(deleteIcon);
 
-	const arrowDown = document.createElement("i");
-	arrowDown.classList.add("fa-solid");
-	arrowDown.classList.add("fa-arrow-down-long");
-	itemButtonDown.setAttribute("onclick",`moveItemDown(${index},${index + 1})`)
+  itemButtonContainer.appendChild(itemButtonUp);
+  itemButtonContainer.appendChild(itemButtonDown);
 
-	const deleteButton = document.createElement("button");
-	deleteButton.classList.add("hidden-buttons");
-	deleteButton.setAttribute("onclick",`deleteItem(${index})`)
+  itemContainer.appendChild(itemButtonContainer);
+  itemContainer.appendChild(itemCheckbox);
+  itemContainer.appendChild(itemName);
 
-	const deleteIcon = document.createElement("i");
-	deleteIcon.classList.add("fa-solid");
-	deleteIcon.classList.add("fa-trash");
+  itemContainer.appendChild(deleteButton);
 
-	itemButtonUp.appendChild(arrowUp);
-	itemButtonDown.appendChild(arrowDown);
-
-	// editButton.appendChild(editIcon);
-	deleteButton.appendChild(deleteIcon);
-
-	itemButtonContainer.appendChild(itemButtonUp);
-	itemButtonContainer.appendChild(itemButtonDown);
-
-	// itemContainer.appendChild(editButton);
-	itemContainer.appendChild(itemButtonContainer);
-	itemContainer.appendChild(itemCheckbox);
-	itemContainer.appendChild(itemName);
-	
-	itemContainer.appendChild(deleteButton);
-
-	listContainer.appendChild(itemContainer);
-
-
-}
-function renderBlank(){
-	localStorage.removeItem("toDoList");
-	const blankList = document.createElement("p");
-	blankList.textContent = "You have no Tasks!";
-	blankList.setAttribute("id","no-tasks");
-	listContainer.appendChild(blankList);
-}
-function getArray(){
-	let myList = JSON.parse(localStorage.getItem("toDoList"));
-	if(myList === null){
-		return []
-	}
-	return myList
-}
-function renderList(){
-	let myToDo = getArray();
-	if (myToDo.length === 0){
-		renderBlank();
-	}else {
-		let items = myToDo.map((item,index) => {
-			renderItem(item,index);
-		})
-	}
-}
-renderList()
-
-function addToList(){
-
-	let myList = getArray();
-	if (myList.length === 0){
-		document.getElementById("no-tasks").remove();
-	}
-	if (currentInput.value !== ""){
-		myList.push(currentInput.value);
-		localStorage.setItem("toDoList",JSON.stringify(myList));
-		renderItem(currentInput.value,myList.length);
-		currentInput.value = "";
-		location.reload();
-	}
-}
-function deleteItem(index){
-	let myList = getArray();
-
-	myList.splice(index,1);
-	
-	
-	if (myList.length === 0){
-		renderBlank();
-	}
-	localStorage.setItem("toDoList",JSON.stringify(myList));
-	reRenderList(listContainer);
+  listContainer.appendChild(itemContainer);
 }
 
-function reRenderList(list){
-	while (list.hasChildNodes()) {
- 	 	list.removeChild(list.firstChild);
-	}
-	renderList()
+function renderBlank() {
+  localStorage.removeItem("toDoList");
+  const blankList = document.createElement("p");
+  blankList.textContent = "You have no Tasks!";
+  blankList.setAttribute("id", "no-tasks");
+  listContainer.appendChild(blankList);
 }
 
-function moveItemUp(index,indexBefore){
-	if (Number(indexBefore) >= 0){
-		let myList = getArray();
-		[myList[Number(indexBefore)],myList[Number(index)]]=[myList[Number(index)],myList[Number(indexBefore)]]
-		localStorage.setItem("toDoList",JSON.stringify(myList));
-		reRenderList(listContainer);
-	}
+function getArray() {
+  const toDoListString = localStorage.getItem("toDoList");
+  return toDoListString ? JSON.parse(toDoListString) : [];
 }
 
-function moveItemDown(index,indexAfter){
-	let myList = getArray();
-	if (Number(indexAfter) < myList.length){
-		[myList[Number(index)],myList[Number(indexAfter)]]=[myList[Number(indexAfter)],myList[Number(index)]]
-		localStorage.setItem("toDoList",JSON.stringify(myList));
-		reRenderList(listContainer);
-	}
+function renderList() {
+  let myToDo = getArray();
+  if (myToDo.length === 0) {
+    renderBlank();
+  } else {
+    for (let i = 0; i < myToDo.length; i++) {
+      renderItem(myToDo[i].text, i, myToDo[i].checked);
+      console.log(myToDo);
+    }
+  }
 }
 
-function editItem(index){
+renderList();
 
+function addToList() {
+  let myList = getArray();
+  if (myList.length === 0) {
+    document.getElementById("no-tasks").remove();
+  }
+  if (currentInput.value !== "") {
+    myList.push({ text: currentInput.value, checked: false });
+
+    // Save to localStorage
+    localStorage.setItem("toDoList", JSON.stringify(myList));
+
+    // Render the new item
+    renderItem(currentInput.value, myList.length - 1, false);
+    currentInput.value = "";
+  }
+}
+
+function deleteItem(index) {
+  let myList = getArray();
+  myList.splice(index, 1);
+
+  if (myList.length === 0) {
+    renderBlank();
+  }
+
+  // Save to localStorage
+  localStorage.setItem("toDoList", JSON.stringify(myList));
+
+  // Re-render the list
+  reRenderList(listContainer);
+}
+
+function reRenderList(list) {
+  while (list.hasChildNodes()) {
+    list.removeChild(list.firstChild);
+  }
+  renderList();
+}
+
+function moveItemUp(index, indexBefore) {
+  if (Number(indexBefore) >= 0) {
+    let myList = getArray();
+    [myList[Number(indexBefore)], myList[Number(index)]] = [
+      myList[Number(index)],
+      myList[Number(indexBefore)],
+    ];
+
+    // Save to localStorage
+    localStorage.setItem("toDoList", JSON.stringify(myList));
+
+    // Re-render the list
+    reRenderList(listContainer);
+  }
+}
+
+function moveItemDown(index, indexAfter) {
+  let myList = getArray();
+  if (Number(indexAfter) < myList.length) {
+    [myList[Number(index)], myList[Number(indexAfter)]] = [
+      myList[Number(indexAfter)],
+      myList[Number(index)],
+    ];
+
+    // Save to localStorage
+    localStorage.setItem("toDoList", JSON.stringify(myList));
+
+    // Re-render the list
+    reRenderList(listContainer);
+  }
+}
+
+function updateCheckboxState(index, isChecked) {
+  let myList = getArray();
+  myList[index].checked = isChecked;
+  localStorage.setItem("toDoList", JSON.stringify(myList));
 }
